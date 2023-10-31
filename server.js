@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 const Example = require('./models/exampleModel');
 
 app.use(express.json());
@@ -28,7 +28,7 @@ mongoose.set('strictQuery', false);
 mongoose.connect('mongodb+srv://Les_Jailes:Les_Jailes123@boutiqueclothing.wsg961s.mongodb.net/API-REST?retryWrites=true&w=majority').
 then(() => {
     app.listen(port, () => {
-        console.log('API REST | Server started | Port 3000');
+        console.log(`API REST | Server started | Port ${port}`);
       });      
     console.log('API REST | Database connected on MongoDB Atlas');
 }).catch(err => {
