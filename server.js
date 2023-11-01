@@ -2,20 +2,27 @@ require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
+const productRouter = require('./routes/ProductsRoutes.js')
+const userRouter = require('./routes/UsersRoutes.js')
 
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
 
+//Middleware
 app.use(express.json());
 
+//Routing
+app.use('/products', productRouter)
+app.use('/users', userRouter)
 app.get('/', (req, res) => {
     res.send('API REST');
 });
 
-
+//MONGODB CONNECTION
 mongoose.set('strictQuery', false);
 mongoose.connect(MONGODB_URL).
 then(() => {
+    //SERVER START
     app.listen(PORT, () => {
         console.log(`API REST | Server started | Port ${PORT}`);
       });      
