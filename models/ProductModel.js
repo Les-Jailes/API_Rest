@@ -41,7 +41,8 @@ const productSchema = mongoose.Schema(
         ],
     },
     {
-        timestamps: true
+        timestamps: true,
+        collection: 'Product' 
     }
 );
 

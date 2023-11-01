@@ -12,8 +12,8 @@ const MONGODB_URL = process.env.MONGODB_URL;
 app.use(express.json());
 
 //Routing
-app.use('/products', productRouter)
-app.use('/users', userRouter)
+app.use('/Product', productRouter)
+app.use('/User', userRouter)
 app.get('/', (req, res) => {
     res.send('API REST');
 });
