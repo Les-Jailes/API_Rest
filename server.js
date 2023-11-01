@@ -1,8 +1,11 @@
+require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
-const port = process.env.PORT || 5000;
 const Example = require('./models/exampleModel');
+
+const PORT = process.env.PORT;
+const MONGODB_URL = process.env.MONGODB_URL;
 
 app.use(express.json());
 
@@ -25,10 +28,10 @@ app.post('/example', async(req, res) => {
 });
 
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb+srv://Les_Jailes:Les_Jailes123@boutiqueclothing.wsg961s.mongodb.net/API-REST?retryWrites=true&w=majority').
+mongoose.connect(MONGODB_URL).
 then(() => {
-    app.listen(port, () => {
-        console.log(`API REST | Server started | Port ${port}`);
+    app.listen(PORT, () => {
+        console.log(`API REST | Server started | Port ${PORT}`);
       });      
     console.log('API REST | Database connected on MongoDB Atlas');
 }).catch(err => {
