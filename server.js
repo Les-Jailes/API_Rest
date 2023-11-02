@@ -5,6 +5,7 @@ const app = express();
 const productRouter = require('./src/routes/ProductsRoutes.js')
 const userRouter = require('./src/routes/UsersRoutes.js')
 var cors = require('cors')
+const errorMiddleware = require('./src/middleware/errorMiddleware.js')
 
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -16,7 +17,7 @@ var corsOptions = {
     optionsSuccessStatus: 200
 }
 //Cors
-app.use(cors(corsOptions));
+app.use(cors());
 
 //Middleware
 app.use(express.json());
@@ -27,6 +28,8 @@ app.use('/User', userRouter)
 app.get('/', (req, res) => {
     res.send('API REST');
 });
+
+app.use(errorMiddleware);
 
 //MONGODB CONNECTION
 mongoose.set('strictQuery', false);

@@ -1,63 +1,72 @@
 const User = require("../models/UserModel.js");
+const asyncHandler = require('express-async-handler');
 
-const getUsers = async(req, res) =>{
+const getUsers = asyncHandler( async(req, res) =>{
         try {
             const users = await User.find({});
             res.status(200).json(users)
         } catch (error) {
-            res.status(500).json({message: error.message})
+            res.status(error.status)
+            throw new Error(error.message);
 
         }
-    }
+    })
 
-const getUser =  async (req, res) =>{
+const getUser =  asyncHandler( async (req, res) =>{
         try {
             const {id} = req.params;
             const user = await User.findById(id);
             if (!user){
-                res.status(404).json({message: `Can not find user with ID: ${id}`})         
+                res.status(error.status)
+                throw new Error(`Can not find product with ID: ${id}`);
             }
             res.status(200).json(user);
         } catch (error) {
-            res.status(500).json({message: error.message})
+            res.status(error.status)
+            throw new Error(error.message);
         }
-    }
+    })
 
 
-const createUser = async (req, res) =>{
+const createUser = asyncHandler( async (req, res) =>{
     try {
         const user = await User.create(req.body);
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(error.status)
+        throw new Error(error.message);
     }
-}
+})
 
-const updateUser =  async (req, res) => {
+const updateUser =  asyncHandler( async (req, res) => {
     try {
         const {id} = req.params;
         const user = await User.findByIdAndUpdate(id, req.body);
         if (!user){
-            res.status(404).json({message: `Can not find user with ID: ${id}`})         
+            res.status(error.status)
+                throw new Error(`Can not find product with ID: ${id}`);
         }
         res.status(200).json(await User.findById(id))
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(error.status)
+        throw new Error(error.message);
     }
-}
+})
 
-const deleteUser =  async (req, res) =>{
+const deleteUser =  asyncHandler( async (req, res) =>{
     try {
         const {id} = req.params;
         const user = await User.findByIdAndDelete(id);
         if (!user){
-            res.status(404).json({message: `Can not find user with ID: ${id}`})         
+            res.status(error.status)
+            throw new Error(`Can not find product with ID: ${id}`);
         }
         res.status(200).json(user)
     } catch (error) {
-        res.status(500).json({message: error.message})
+        res.status(error.status)
+        throw new Error(error.message);
     }
-}
+})
 
 module.exports = {
     getUser, getUsers, createUser, updateUser, deleteUser
