@@ -4,9 +4,19 @@ const mongoose = require('mongoose');
 const app = express();
 const productRouter = require('./routes/ProductsRoutes.js')
 const userRouter = require('./routes/UsersRoutes.js')
+var cors = require('cors')
 
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
+const FRONTEND1 = process.env.FRONTEND1;
+const FRONTEND2 = process.env.FRONTEND2;
+
+var corsOptions = {
+    origin: [FRONTEND1, FRONTEND2],
+    optionsSuccessStatus: 200
+}
+//Cors
+app.use(cors(corsOptions));
 
 //Middleware
 app.use(express.json());
