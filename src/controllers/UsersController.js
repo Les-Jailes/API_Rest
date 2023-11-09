@@ -65,9 +65,23 @@ const deleteUser =  asyncHandler( async (req, res) =>{
     } catch (error) {
         res.status(error.status)
         throw new Error(error.message);
-    }
+    }   
 })
 
+
+const getUserByEmail = asyncHandler(async (req, res) => {
+    const { email } = req.params;
+  
+    const user = await User.findOne({ email: email });
+  
+    if (!user) {
+      res.status(404).json({ message: 'User not found with email: ' + email });
+      return;
+    }
+  
+    res.status(200).json(user);
+  });
+
 module.exports = {
-    getUser, getUsers, createUser, updateUser, deleteUser
+    getUser, getUsers, createUser, updateUser, deleteUser, getUserByEmail
 }
