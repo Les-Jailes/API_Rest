@@ -4,16 +4,17 @@ const mongoose = require('mongoose');
 const app = express();
 const productRouter = require('./src/routes/ProductsRoutes.js')
 const userRouter = require('./src/routes/UsersRoutes.js')
-var cors = require('cors')
+let cors = require('cors')
 const errorMiddleware = require('./src/middleware/errorMiddleware.js')
 
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
 const FRONTEND1 = process.env.FRONTEND1;
 const FRONTEND2 = process.env.FRONTEND2;
+const DEV_ENVIRONMENT = process.env.DEV_ENVIRONMENT
 
-var corsOptions = {
-    origin: [FRONTEND1, FRONTEND2],
+let corsOptions = {
+    origin: [FRONTEND1, FRONTEND2, DEV_ENVIRONMENT],
     optionsSuccessStatus: 200
 }
 //Cors
@@ -38,7 +39,7 @@ then(() => {
     //SERVER START
     app.listen(PORT, () => {
         console.log(`API REST | Server started | Port ${PORT}`);
-      });      
+    });      
     console.log('API REST | Database connected on MongoDB Atlas');
 }).catch(err => {
     console.log('API REST | Database connection error');
