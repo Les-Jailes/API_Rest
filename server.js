@@ -4,7 +4,8 @@ const mongoose = require('mongoose');
 const app = express();
 const productRouter = require('./src/routes/ProductsRoutes.js')
 const userRouter = require('./src/routes/UsersRoutes.js')
-let cors = require('cors')
+const checkoutPaymentRouter = require('./src/routes/CheckoutPaymentRoutes.js'); 
+const cors = require('cors')
 const errorMiddleware = require('./src/middleware/errorMiddleware.js')
 const stripe = require('stripe');
 
@@ -27,6 +28,7 @@ app.use(express.json());
 //Routing
 app.use('/Product', productRouter)
 app.use('/User', userRouter)
+app.use('/CheckoutPayment', checkoutPaymentRouter);
 app.get('/', (req, res) => {
     res.send('API REST');
 });
