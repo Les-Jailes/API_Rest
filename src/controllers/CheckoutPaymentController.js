@@ -1,10 +1,44 @@
+require('dotenv').config();
 const CheckoutPayment = require('../models/CheckoutPaymentModel');
 const asyncHandler = require('express-async-handler');
+const Stripe = require('stripe');
+
+const SECRET_KEY_STRIPE = process.env.SECRET_KEY_STRIPE;
+const stripe = new Stripe(SECRET_KEY_STRIPE);
+
+const getReturnUrl = () => {
+    switch (process.env.NODE_ENV) {
+        case 'development':
+            return process.env.RETURN_URL_DEV;
+        case 'test':
+            return process.env.RETURN_URL_TEST;
+        case 'production':
+            return process.env.RETURN_URL_PROD;
+        default:
+            return process.env.RETURN_URL_DEV; 
+    }
+};
 
 const createCheckoutPayment = asyncHandler(async (req, res) => {
     try {
-        const checkoutPayment = await CheckoutPayment.create(req.body);
-        res.status(201).json(checkoutPayment);
+        const { paymentMethodId, amount, billingDetails } = req.body;
+        const returnUrl = getReturnUrl();
+
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount * 100,
+            currency: 'usd',
+            payment_method: paymentMethodId,
+            confirm: true,
+            return_url: returnUrl
+        });
+
+        const checkoutPayment = await CheckoutPayment.create({
+            paymentMethodId,
+            amount,
+            billingDetails
+        });
+
+        res.status(201).json({ message: 'Successful Payment', checkoutPayment });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
