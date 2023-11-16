@@ -6,6 +6,7 @@ const productRouter = require('./src/routes/ProductsRoutes.js')
 const userRouter = require('./src/routes/UsersRoutes.js')
 let cors = require('cors')
 const errorMiddleware = require('./src/middleware/errorMiddleware.js')
+const stripe = require('stripe');
 
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
