@@ -25,7 +25,7 @@ const createCheckoutPayment = asyncHandler(async (req, res) => {
         const returnUrl = getReturnUrl();
 
         const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount * 100,
+            amount: Math.round(amount * 100),
             currency: 'usd',
             payment_method: paymentMethodId,
             confirm: true,
