@@ -21,7 +21,7 @@ const getReturnUrl = () => {
 
 const createCheckoutPayment = asyncHandler(async (req, res) => {
     try {
-        const { paymentMethodId, amount, billingDetails } = req.body;
+        const { paymentMethodId, amount, billingDetails, purchasedProducts } = req.body;
         const returnUrl = getReturnUrl();
 
         const paymentIntent = await stripe.paymentIntents.create({
@@ -35,11 +35,13 @@ const createCheckoutPayment = asyncHandler(async (req, res) => {
         const checkoutPayment = await CheckoutPayment.create({
             paymentMethodId,
             amount,
-            billingDetails
+            billingDetails,
+            purchasedProducts 
         });
 
         res.status(201).json({ message: 'Successful Payment', checkoutPayment });
     } catch (error) {
+        console.log(error.message)
         res.status(400).json({ message: error.message });
     }
 });
