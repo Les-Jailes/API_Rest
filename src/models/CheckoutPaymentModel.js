@@ -77,6 +77,10 @@ const purchasedProductSchema = mongoose.Schema({
 });
 
 const checkoutPaymentSchema = mongoose.Schema({
+    userId:{
+        type: String,
+        require: true
+    },
     paymentMethodId: {
         type: String,
         required: true

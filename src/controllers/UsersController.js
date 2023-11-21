@@ -82,6 +82,16 @@ const getUserByEmail = asyncHandler(async (req, res) => {
     res.status(200).json(user);
   });
 
+  const findUserIdByEmail = async (email) => {
+    try {
+        const user = await User.findOne({ email: email });
+        return user ? user._id.toString() : null;
+    } catch (error) {
+        console.error("Error al buscar usuario por email:", error);
+        throw error;
+    }
+};
+
 module.exports = {
-    getUser, getUsers, createUser, updateUser, deleteUser, getUserByEmail
+    getUser, getUsers, createUser, updateUser, deleteUser, getUserByEmail, findUserIdByEmail
 }
