@@ -2,7 +2,7 @@ require('dotenv').config();
 const CheckoutPayment = require('../models/CheckoutPaymentModel');
 const asyncHandler = require('express-async-handler');
 const Stripe = require('stripe');
-
+const { updateProductQuantities } = require('../controllers/ProductsController');
 const SECRET_KEY_STRIPE = process.env.SECRET_KEY_STRIPE;
 const stripe = new Stripe(SECRET_KEY_STRIPE);
 
@@ -39,6 +39,8 @@ const createCheckoutPayment = asyncHandler(async (req, res) => {
             purchasedProducts 
         });
 
+        await updateProductQuantities(purchasedProducts);
+ 
         res.status(201).json({ message: 'Successful Payment', checkoutPayment });
     } catch (error) {
         console.log(error.message)

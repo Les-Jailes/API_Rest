@@ -68,6 +68,27 @@ const deleteProduct =  asyncHandler( async (req, res) =>{
     }
 })
 
+const updateProductQuantities = asyncHandler(async (purchasedProducts) => {
+    for (const purchasedProduct of purchasedProducts) {
+        const productInDB = await Product.findOne({ code: purchasedProduct.code });
+
+        if (!productInDB) {
+            console.error(`Producto no encontrado en la base de datos con código: ${purchasedProduct.code}`);
+            continue; 
+        }
+
+        const sizeToUpdate = productInDB.sizes.find(size => size.size === purchasedProduct.size);
+
+        if (sizeToUpdate) {
+            sizeToUpdate.quantity = Math.max(0, sizeToUpdate.quantity - purchasedProduct.quantity); // Restar cantidad, pero no permitir valores negativos
+            await productInDB.save();
+        } else {
+            console.error(`Tamaño no encontrado para el producto con código: ${purchasedProduct.code}`);
+        }
+    }
+});
+
+
 module.exports = {
-    getProduct, getProducts, createProduct, updateProduct, deleteProduct
+    getProduct, getProducts, createProduct, updateProduct, deleteProduct, updateProductQuantities
 }
