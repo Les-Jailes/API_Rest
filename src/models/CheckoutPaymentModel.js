@@ -29,6 +29,53 @@ const billingDetailsSchema = mongoose.Schema({
     }
 });
 
+const purchasedProductSchema = mongoose.Schema({
+    _id: {
+        type: String,
+        required: true
+    },
+    code: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    description: {
+        type: String,
+        required: false 
+    },
+    price: {
+        type: Number,
+        required: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    type: {
+        type: String,
+        required: true
+    },
+    color: [{
+        type: String,
+        required: true
+    }],
+    path: [{
+        type: String,
+        required: true
+    }],
+    size: {
+        type: String,
+        required: true
+    },
+    quantity: {
+        type: Number,
+        required: true
+    }
+});
+
 const checkoutPaymentSchema = mongoose.Schema({
     paymentMethodId: {
         type: String,
@@ -38,7 +85,8 @@ const checkoutPaymentSchema = mongoose.Schema({
         type: Number,
         required: true
     },
-    billingDetails: billingDetailsSchema
+    billingDetails: billingDetailsSchema,
+    purchasedProducts: [purchasedProductSchema]
 }, {
     timestamps: true,
     collection: 'CheckoutPayments'
