@@ -14,10 +14,10 @@ const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
 const FRONTEND1 = process.env.FRONTEND1;
 const FRONTEND2 = process.env.FRONTEND2;
-const TEST_ENVIRONMENT = process.env.TEST_ENVIRONMENT
+const DEV_ENVIRONMENT = process.env.DEV_ENVIRONMENT
 
 let corsOptions = {
-    origin: [FRONTEND1, FRONTEND2, TEST_ENVIRONMENT],
+    origin: [FRONTEND1, FRONTEND2, DEV_ENVIRONMENT],
     optionsSuccessStatus: 200
 }
 //Cors
