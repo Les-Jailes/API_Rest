@@ -1,10 +1,22 @@
 const mongoose = require('mongoose')
 
+const zipCodeSchema = mongoose.Schema(
+    {
+        subCityName: {
+            type: String
+        },
+        zipCode: {
+            type: String
+        }
+    }
+)
+
 const countrySchema = mongoose.Schema(
     {
         countryName: {
             type: String,
-            required: true
+            required: true,
+            index: true
         },
         tax: {
             type: Number,
@@ -12,15 +24,19 @@ const countrySchema = mongoose.Schema(
         },
         cityName: {
             type: String,
-            required: true
+            required: true,
+            index: true
         },
-        zipCode: {
-            type: String,
-            required: true
-        },
+        zipCodes: [
+            zipCodeSchema
+        ],
         telephoneCode: {
             type: String,
-            required: true
+            required: true,
+            index: true
         }
     }
 )
+
+const Country = mongoose.model("Country", countrySchema)
+module.exports = Country
