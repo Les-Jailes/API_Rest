@@ -1,14 +1,15 @@
 const Country = require('../models/CountryModel')
 const asyncHandler = require('express-async-handler')
+const validateCountry = require('../utils/ValidationCountry')
 
 const getCountries = asyncHandler(async (request, response) => {
     try {
         const countries = await Country.find({})
         response.status(200).json(countries)
     } catch (error) {
-        response.status(error.status).json({
-            message: error
-        })
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
@@ -22,8 +23,9 @@ const getCountryById = asyncHandler(async (request, response) => {
         }
         response.status(200).json(country)
     } catch (error) {
-        res.status(error.status)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
@@ -37,8 +39,9 @@ const getCountryByName = asyncHandler(async (request, response) => {
             response.status(200).json(listCountry)
         }
     } catch (error) {
-        res.status(error.status)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
@@ -55,57 +58,24 @@ const getCountryByTelephoneCode = asyncHandler(async (request, response) => {
             })
         }
     } catch (error) {
-        res.status(error.status)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
 const createCountry = asyncHandler(async (request, response) => {
     try {
-        const country = request.body
-
-        const regex = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/
-
-        console.log(country)
-
-        if (country.countryName.length < 4) {
-            response.status(400).json({
-                error: 'The country name must have a minimum of 4 characters.'
-            })
-        } else if (!regex.test(country.countryName)) {
-            response.status(400).json({
-                error: 'The country name must have only letters and may include spaces.'
-            })
-        } else {
-            const words = country.countryName.split(' ')
-
-            const formattedCountryName = words
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-                .join(' ')
-
-            if (formattedCountryName !== country.countryName) {
-                response.status(400).json({
-                    error: 'The country name must have each word starting with an uppercase letter and the rest in lowercase.'
-                })
-            } else if (country.tax < 0 || country.tax > 100) {
-                response.status(400).json({
-                    error: 'Taxes must be a minimum of 0 and a maximum of 100'
-                })
-            } else if (country.cityName.length === 0) {
-                response.status(400).json({
-                    error: 'The city name must have a minimum of 4 characters'
-                })
-            } else {
-                response.status(200).json(country)
-                await Country.create(country)
-            }
-        }
+        const country = request.body;
+        validateCountry(country);
+        response.status(200).json(country);
+        await Country.create(country);
     } catch (error) {
-        response.status(error.status)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
-})
-
+});
 
 const deleteCountry = asyncHandler(async (request, response) => {
     try {
@@ -117,8 +87,9 @@ const deleteCountry = asyncHandler(async (request, response) => {
         }
         response.status(200).json(country)
     } catch (error) {
-        response.status(error.status)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
@@ -131,8 +102,9 @@ const deleteCountryByName = asyncHandler(async (request, response) => {
             message: `Deleted ${result.deletedCount} objects of: ${name}`
         })
     } catch (error) {
-        response.status(error.status)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
@@ -161,8 +133,9 @@ const deleteCity = asyncHandler(async (request, response) => {
             deletedCity
         })
     } catch (error) {
-        response.status(error.status || 500)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
@@ -176,8 +149,9 @@ const updateCountry = asyncHandler(async (request, response) => {
         }
         response.status(200).json(await Country.findById(id))
     } catch (error) {
-        response.status(error.status)
-        throw new Error(error.message)
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
     }
 })
 
