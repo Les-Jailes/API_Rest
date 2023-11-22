@@ -18,7 +18,7 @@ const getUser =  asyncHandler( async (req, res) =>{
             const user = await User.findById(id);
             if (!user){
                 res.status(error.status)
-                throw new Error(`Can not find product with ID: ${id}`);
+                throw new Error(`Can not find user with ID: ${id}`);
             }
             res.status(200).json(user);
         } catch (error) {
@@ -82,6 +82,16 @@ const getUserByEmail = asyncHandler(async (req, res) => {
     res.status(200).json(user);
   });
 
+  const findUserIdByEmail = async (email) => {
+    try {
+        const user = await User.findOne({ email: email });
+        return user ? user._id.toString() : null;
+    } catch (error) {
+        console.error("Error al buscar usuario por email:", error);
+        throw error;
+    }
+};
+
 module.exports = {
-    getUser, getUsers, createUser, updateUser, deleteUser, getUserByEmail
+    getUser, getUsers, createUser, updateUser, deleteUser, getUserByEmail, findUserIdByEmail
 }

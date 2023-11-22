@@ -68,6 +68,27 @@ const deleteProduct =  asyncHandler( async (req, res) =>{
     }
 })
 
+const updateProductQuantities = asyncHandler(async (purchasedProducts) => {
+    for (const purchasedProduct of purchasedProducts) {
+        const productInDB = await Product.findOne({ code: purchasedProduct.code });
+
+        if (!productInDB) {
+            console.error(`Product not found in the database with code: ${purchasedProduct.code}`);
+            continue; 
+        }
+
+        const sizeToUpdate = productInDB.sizes.find(size => size.size === purchasedProduct.size);
+
+        if (sizeToUpdate) {
+            sizeToUpdate.quantity = Math.max(0, sizeToUpdate.quantity - purchasedProduct.quantity); 
+            await productInDB.save();
+        } else {
+            console.error(`Size not found for the product with code: ${purchasedProduct.code}`);
+        }
+    }
+});
+
+
 module.exports = {
-    getProduct, getProducts, createProduct, updateProduct, deleteProduct
+    getProduct, getProducts, createProduct, updateProduct, deleteProduct, updateProductQuantities
 }
