@@ -18,7 +18,7 @@ const getUser =  asyncHandler( async (req, res) =>{
             const user = await User.findById(id);
             if (!user){
                 res.status(error.status)
-                throw new Error(`Can not find product with ID: ${id}`);
+                throw new Error(`Can not find user with ID: ${id}`);
             }
             res.status(200).json(user);
         } catch (error) {
