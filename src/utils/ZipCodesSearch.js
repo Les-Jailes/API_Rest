@@ -1,26 +1,24 @@
-const { getAbbreviation } = require('./SearchTelephoneCode')
+const axios = require('axios');
+const { getAbbreviation } = require('./SearchTelephoneCode');
 
 async function getFormatZipCode(countryName) {
     try {
-        const countryCode = getAbbreviation(countryName)
+        const countryCode = getAbbreviation(countryName);
 
         if (countryCode) {
-            const url = `https://restcountries.com/v3.1/alpha/${countryCode}`
-            const response = await fetch(url)
+            const url = `https://restcountries.com/v3.1/alpha/${countryCode}`;
+            const response = await axios.get(url);
 
-            if (response.ok) {
-                const data = await response.json()
-                const postalCodeFormat = data[0]?.postalCode?.regex || null
-                return postalCodeFormat
-            } else {
-                throw new Error(`Failed to fetch data. Status code: ${response.status}`)
-            }
+            const data = response.data;
+            const postalCodeFormat = data[0]?.postalCode?.regex || null;
+
+            return postalCodeFormat;
         } else {
-            throw new Error('Invalid country code.')
+            throw new Error('Invalid country code.');
         }
     } catch (error) {
-        throw new Error(`Error in getFormatZipCode: ${error.message}`)
+        throw new Error(`Error in getFormatZipCode: ${error.message}`);
     }
 }
 
-module.exports = getFormatZipCode
+module.exports = getFormatZipCode;
