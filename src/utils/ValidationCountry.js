@@ -1,6 +1,7 @@
-const getCountryCodeByName = require('./SearchTelephoneCode')
+const { getCountryCodeByName } = require('./SearchTelephoneCode')
+const getFormatZipCode = require('./ZipCodesSearch')
 
-function validateCountry(country) {
+async function validateCountry(country) {
     validateFieldLength(country.countryName, 'The country name must have a minimum of 4 characters.', 4)
     validateRegex(country.countryName, /^[a-zA-Z]+(?: [a-zA-Z]+)*$/, 'The country name must have only letters and may include spaces.')
 
@@ -30,6 +31,9 @@ function validateCountry(country) {
             validateRegex(subCityInformation.subCityName, /^[a-zA-Z]+(?: [a-zA-Z]+)*$/, 'The sub city name must have only letters and may include spaces.')
             let subCityName = formatName(subCityInformation.subCityName)
             validateEqual(subCityName, subCityInformation.subCityName, `The sub city name of " ${subCityInformation.subCityName} " must have each word starting with an uppercase letter and the rest in lowercase.`)
+            let zipCodeRegex = await getFormatZipCode(country.countryName)
+            console.log(subCityInformation)
+            validateRegexWithString(subCityInformation.zipCode, zipCodeRegex, 'The ZIP code is incorrectly formatted.')
         }
     }
 }
@@ -43,6 +47,13 @@ function validateFieldLength(value, errorMessage, minimum) {
 function validateRegex(value, regex, errorMessage) {
     if (!regex.test(value)) {
         throw createError(400, errorMessage)
+    }
+}
+
+function validateRegexWithString(value, regex, errorMessage) {
+    const regexFormat = new RegExp(regex);
+    if (!regexFormat.test(value)) {
+        throw createError(400, errorMessage);
     }
 }
 

@@ -18,6 +18,8 @@
     "express-async-handler": "^1.2.0",
     "libphonenumber-js": "^1.10.50",
     "mongoose": "^7.6.4",
+    "node-fetch": "^3.3.2",
+    "request": "^2.88.2",
     "stripe": "^14.4.0"
   },
   "devDependencies": {

@@ -4,6 +4,7 @@ const errorMiddleware = (err, req, res, next) =>{
     res.json({
         middleware: "Error - middleware",
         message: err.message,
+        completeError: err,
         status: status,
         stack: err.stack,        
     })

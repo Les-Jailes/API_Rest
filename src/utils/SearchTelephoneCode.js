@@ -26,4 +26,4 @@ function getAbbreviation(countryName) {
     }
 }
 
-module.exports = getCountryCodeByName
+module.exports = { getCountryCodeByName, getAbbreviation }
