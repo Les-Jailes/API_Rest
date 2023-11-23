@@ -73,17 +73,17 @@ const updateProductQuantities = asyncHandler(async (purchasedProducts) => {
         const productInDB = await Product.findOne({ code: purchasedProduct.code });
 
         if (!productInDB) {
-            console.error(`Producto no encontrado en la base de datos con código: ${purchasedProduct.code}`);
+            console.error(`Product not found in the database with code: ${purchasedProduct.code}`);
             continue; 
         }
 
         const sizeToUpdate = productInDB.sizes.find(size => size.size === purchasedProduct.size);
 
         if (sizeToUpdate) {
-            sizeToUpdate.quantity = Math.max(0, sizeToUpdate.quantity - purchasedProduct.quantity); // Restar cantidad, pero no permitir valores negativos
+            sizeToUpdate.quantity = Math.max(0, sizeToUpdate.quantity - purchasedProduct.quantity); 
             await productInDB.save();
         } else {
-            console.error(`Tamaño no encontrado para el producto con código: ${purchasedProduct.code}`);
+            console.error(`Size not found for the product with code: ${purchasedProduct.code}`);
         }
     }
 });
