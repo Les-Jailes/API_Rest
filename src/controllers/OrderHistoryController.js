@@ -11,7 +11,7 @@ const getUserHistoryById =  asyncHandler( async (req, res) =>{
             throw new Error(`Can not find user with ID: ${id}`);
         }
         
-        const checkoutPayment = await CheckoutPayment.findOne({ userId : id });
+        const checkoutPayment = await CheckoutPayment.find({ userId : id });
         if (!checkoutPayment){
             res.status(error.status)
             throw new Error(`Can not find user with checkout ID: ${id}`);

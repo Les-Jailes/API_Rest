@@ -8,16 +8,17 @@ const checkoutPaymentRouter = require('./src/routes/CheckoutPaymentRoutes.js');
 const cors = require('cors')
 const errorMiddleware = require('./src/middleware/errorMiddleware.js')
 const stripe = require('stripe');
+const countryRouter = require('./src/routes/CountryRoutes.js');
 const { HistoryRouter } = require('./src/routes/OrderHistoryRoutes.js');
 
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
 const FRONTEND1 = process.env.FRONTEND1;
 const FRONTEND2 = process.env.FRONTEND2;
-const TEST_ENVIRONMENT = process.env.TEST_ENVIRONMENT
+const DEV_ENVIRONMENT = process.env.DEV_ENVIRONMENT
 
 let corsOptions = {
-    origin: [FRONTEND1, FRONTEND2, TEST_ENVIRONMENT],
+    origin: [FRONTEND1, FRONTEND2, DEV_ENVIRONMENT],
     optionsSuccessStatus: 200
 }
 //Cors
@@ -31,6 +32,7 @@ app.use('/Product', productRouter)
 app.use('/User', userRouter)
 app.use('/OrderHistory', HistoryRouter )
 app.use('/CheckoutPayment', checkoutPaymentRouter);
+app.use('/Country', countryRouter)
 app.get('/', (req, res) => {
     res.send('API REST');
 });
