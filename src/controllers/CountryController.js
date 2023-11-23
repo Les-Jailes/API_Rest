@@ -37,7 +37,7 @@ const getCountryByName = asyncHandler(async (request, response) => {
             response.status(404).json({ error: `${name} is not available` })
         } else {
             response.status(200).json({
-                message: `${listCountry.length} ${ listCountry.length === 1 ? 'item' : 'items' } found for the search of ${name}`,
+                message: `${listCountry.length} ${listCountry.length === 1 ? 'item' : 'items'} found for the search of ${name}`,
                 listCountry
             })
         }
@@ -67,12 +67,45 @@ const getCountryByTelephoneCode = asyncHandler(async (request, response) => {
     }
 })
 
+const getCityByName = asyncHandler(async (request, response) => {
+    try {
+        const { countryName, cityName } = request.params
+
+        const country = await Country.findOne({ countryName: countryName })
+
+        if (!country) {
+            response.status(404)
+            throw new Error(`${countryName} not found`)
+        }
+
+        const city = await Country.findOne({ countryName: countryName, cityName: cityName })
+
+        if (!city) {
+            response.status(404)
+            throw new Error(`${cityName} of ${countryName} not found`)
+        }
+
+        response.status(200).json(city)
+    } catch (error) {
+        response.status(error.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        })
+    }
+})
+
 const createCountry = asyncHandler(async (request, response) => {
     try {
         const country = request.body
         await validateCountry(country)
-        await Country.create(country)
-        response.status(200).json(country)
+        const city = await Country.findOne({ countryName: country.countryName, cityName: country.cityName })
+        if (city) {
+            response.status(400).json({
+                message: `${country.cityName} is exists`
+            })
+        } else {
+            await Country.create(country)
+            response.status(200).json(country)
+        }
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
@@ -144,18 +177,37 @@ const deleteCity = asyncHandler(async (request, response) => {
 
 const updateCountry = asyncHandler(async (request, response) => {
     try {
-        const { id } = request.params
-        const country = await Country.findByIdAndUpdate(id, request.body)
-        if (!country) {
-            response.status(error.status)
-            throw new Error(`Can not find country with id ${id}`)
+        const { id } = request.params;
+        const existingCountry = await Country.findById(id);
+        if (!existingCountry) {
+            response.status(404);
+            throw new Error(`No country found with id: ${id}`);
         }
-        response.status(200).json(await Country.findById(id))
+        const updatedCountryInfo = request.body;
+        await validateCountry(updatedCountryInfo);
+        const existingCity = await Country.findOne({
+            _id: id,
+            cityName: updatedCountryInfo.cityName
+        });
+
+        if (!existingCity) {
+            response.status(404);
+            throw new Error(`City '${updatedCountryInfo.cityName}' not found in country with id: ${id}`);
+        }
+        const updatedCountry = await Country.findByIdAndUpdate(id, updatedCountryInfo, { new: true });
+
+        if (!updatedCountry) {
+            response.status(500);
+            throw new Error(`Failed to update country with id: ${id}`);
+        }
+
+        response.status(200).json(updatedCountry);
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        })
+        });
     }
-})
+});
 
-module.exports = { createCountry, getCountries, getCountryById, getCountryByName, getCountryByTelephoneCode, deleteCountry, deleteCountryByName, deleteCity, updateCountry }
+
+module.exports = { createCountry, getCountries, getCountryById, getCountryByName, getCountryByTelephoneCode, getCityByName, deleteCountry, deleteCountryByName, deleteCity, updateCountry }

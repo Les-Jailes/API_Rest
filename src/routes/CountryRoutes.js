@@ -1,5 +1,5 @@
 const express = require('express')
-const { createCountry, getCountries, deleteCountry, updateCountry, getCountryById, getCountryByName, deleteCountryByName, deleteCity, getCountryByTelephoneCode } = require('../controllers/CountryController.js')
+const { createCountry, getCountries, deleteCountry, updateCountry, getCountryById, getCountryByName, deleteCountryByName, deleteCity, getCountryByTelephoneCode, getCityByName } = require('../controllers/CountryController.js')
 
 const countryRouter = express.Router()
 
@@ -8,6 +8,7 @@ countryRouter.get('/', getCountries)
 countryRouter.get('/:id', getCountryById)
 countryRouter.get('/name/:name', getCountryByName)
 countryRouter.get('/telephone-code/:telephoneCode', getCountryByTelephoneCode)
+countryRouter.get('/name/:countryName/city/:cityName', getCityByName)
 
 // POST request
 countryRouter.post('/', createCountry)
