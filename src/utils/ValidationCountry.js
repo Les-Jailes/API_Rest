@@ -32,8 +32,7 @@ async function validateCountry(country) {
             let subCityName = formatName(subCityInformation.subCityName)
             validateEqual(subCityName, subCityInformation.subCityName, `The sub city name of " ${subCityInformation.subCityName} " must have each word starting with an uppercase letter and the rest in lowercase.`)
             let zipCodeRegex = await getFormatZipCode(country.countryName)
-            console.log(subCityInformation)
-            validateRegexWithString(subCityInformation.zipCode, zipCodeRegex, 'The ZIP code is incorrectly formatted.')
+            validateRegexWithString(subCityInformation.zipCode, zipCodeRegex, 'The ZIP code is in the wrong format. Please check the following page to find out the format for your country (https://www.mbi.com.br/mbi/biblioteca/paises/codigo-postal/)')
         }
     }
 }

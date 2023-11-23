@@ -70,9 +70,9 @@ const getCountryByTelephoneCode = asyncHandler(async (request, response) => {
 const createCountry = asyncHandler(async (request, response) => {
     try {
         const country = request.body
-        validateCountry(country)
-        response.status(200).json(country)
+        await validateCountry(country)
         await Country.create(country)
+        response.status(200).json(country)
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
