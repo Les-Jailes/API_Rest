@@ -1,31 +1,29 @@
-const PhoneNumber = require('libphonenumber-js');
-const countries = require('../utils/CountriesAbbreviation.json');
+const PhoneNumber = require('libphonenumber-js')
+const countries = require('../utils/CountriesAbbreviation.json')
 
 function getCountryCodeByName(countryName) {
-    let abbreviation = getAbbreviation(countryName);
+    let abbreviation = getAbbreviation(countryName)
 
     if (abbreviation) {
         const telephoneCodeApi = PhoneNumber.getCountryCallingCode(abbreviation)
 
-        console.log(telephoneCodeApi)
-
         if (telephoneCodeApi) {
-            const telephoneCode = `+${telephoneCodeApi}`;
-            return telephoneCode;
+            const telephoneCode = `+${telephoneCodeApi}`
+            return telephoneCode
         }
     }
 
-    return null;
+    return null
 }
 
 function getAbbreviation(countryName) {
-    const countryInfo = countries.countries.find((country) => country.name.toLowerCase() === countryName.toLowerCase());
+    const countryInfo = countries.countries.find((country) => country.name.toLowerCase() === countryName.toLowerCase())
 
     if (countryInfo) {
-        return countryInfo.abbreviation;
+        return countryInfo.abbreviation
     } else {
-        return null;
+        return null
     }
 }
 
-module.exports = getCountryCodeByName;
+module.exports = getCountryCodeByName

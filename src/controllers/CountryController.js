@@ -9,7 +9,7 @@ const getCountries = asyncHandler(async (request, response) => {
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
@@ -25,7 +25,7 @@ const getCountryById = asyncHandler(async (request, response) => {
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
@@ -36,12 +36,15 @@ const getCountryByName = asyncHandler(async (request, response) => {
         if (listCountry.length === 0) {
             response.status(404).json({ error: `${name} is not available` })
         } else {
-            response.status(200).json(listCountry)
+            response.status(200).json({
+                message: `${listCountry.length} ${ listCountry.length === 1 ? 'item' : 'items' } found for the search of ${name}`,
+                listCountry
+            })
         }
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
@@ -60,22 +63,22 @@ const getCountryByTelephoneCode = asyncHandler(async (request, response) => {
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
 const createCountry = asyncHandler(async (request, response) => {
     try {
-        const country = request.body;
-        validateCountry(country);
-        response.status(200).json(country);
-        await Country.create(country);
+        const country = request.body
+        validateCountry(country)
+        response.status(200).json(country)
+        await Country.create(country)
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
-});
+})
 
 const deleteCountry = asyncHandler(async (request, response) => {
     try {
@@ -89,7 +92,7 @@ const deleteCountry = asyncHandler(async (request, response) => {
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
@@ -104,7 +107,7 @@ const deleteCountryByName = asyncHandler(async (request, response) => {
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
@@ -135,7 +138,7 @@ const deleteCity = asyncHandler(async (request, response) => {
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
@@ -151,7 +154,7 @@ const updateCountry = asyncHandler(async (request, response) => {
     } catch (error) {
         response.status(error.status || 500).json({
             message: error.message || 'Internal Server Error',
-        });
+        })
     }
 })
 
