@@ -8,6 +8,7 @@ const checkoutPaymentRouter = require('./src/routes/CheckoutPaymentRoutes.js');
 const cors = require('cors')
 const errorMiddleware = require('./src/middleware/errorMiddleware.js')
 const stripe = require('stripe');
+const countryRouter = require('./src/routes/CountryRoutes.js');
 const { HistoryRouter } = require('./src/routes/OrderHistoryRoutes.js');
 
 const PORT = process.env.PORT;
@@ -31,6 +32,7 @@ app.use('/Product', productRouter)
 app.use('/User', userRouter)
 app.use('/OrderHistory', HistoryRouter )
 app.use('/CheckoutPayment', checkoutPaymentRouter);
+app.use('/Country', countryRouter)
 app.get('/', (req, res) => {
     res.send('API REST');
 });
