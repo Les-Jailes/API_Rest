@@ -97,7 +97,6 @@ const searchProducts = asyncHandler(async (req, res) => {
                 { name: { $regex: term, $options: 'i' } },
                 { category: { $regex: term, $options: 'i' } },
                 { type: { $regex: term, $options: 'i' } },
-                { description: { $regex: term, $options: 'i' } },
                 { code: { $regex: term, $options: 'i' } },
                 { "color": { $regex: term, $options: 'i' } }, 
             ]
