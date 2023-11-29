@@ -10,6 +10,7 @@ const errorMiddleware = require('./src/middleware/errorMiddleware.js')
 const stripe = require('stripe');
 const countryRouter = require('./src/routes/CountryRoutes.js');
 const { HistoryRouter } = require('./src/routes/OrderHistoryRoutes.js');
+const emailRouter = require('./src/routes/EmailRoutes.js')
 
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -33,6 +34,7 @@ app.use('/User', userRouter)
 app.use('/OrderHistory', HistoryRouter )
 app.use('/CheckoutPayment', checkoutPaymentRouter);
 app.use('/Country', countryRouter)
+app.use('/Email', emailRouter)
 app.get('/', (req, res) => {
     res.send('API REST');
 });
