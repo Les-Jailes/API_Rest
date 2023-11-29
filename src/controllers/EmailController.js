@@ -6,7 +6,7 @@ const EMAIL = process.env.EMAIL
 const PASSWORD = process.env.PASSWORD
 
 const sendEmail =  (req, res) => {
-    const { userEmail } = req.body;
+    const { email, name, telephone, comments } = req.body;
     let config = {
         service : 'gmail',
         auth : {
@@ -16,26 +16,19 @@ const sendEmail =  (req, res) => {
     }
     let transporter = nodemailer.createTransport(config);
     let MailGenerator = new Mailgen({
-        theme: "default",
+        theme: "cerberus",
         product : {
-            name: "Mailgen",
-            link : 'https://mailgen.js/'
+            logo: "https://i.postimg.cc/WpY5Qt18/logo-White.png",
+            logoHeight: "200px",
+            name: "LES JAILES - CONTACT US FORM",
+            link : 'https://test-boutique-clothing.vercel.app/'
         }
     })
     let response = {
         body: {
-            name : `Daily Tuition from ${userEmail}`,
-            intro: "Your bill has arrived!",
-            table : {
-                data : [
-                    {
-                        item : "Nodemailer Stack Book",
-                        description: "A Backend application",
-                        price : "$10.99",
-                    }
-                ]
-            },
-            outro: "Looking forward to do more business"
+            title : `Hi Les jailes, from ${name}`,
+            intro: `My telephone number is: ${telephone}.\nI have the following message:\n\n"${comments}"`,
+            outro: `Thanks, I will hear your response.\n Atte. ${name} - ${email}`
         }
     }
 
@@ -44,13 +37,13 @@ const sendEmail =  (req, res) => {
     let message = {
         from : EMAIL,
         to : EMAIL,
-        subject: "Place Order",
+        subject: `Contact Us Message - User ${email}`,
         html: mail
     }
 
     transporter.sendMail(message).then(() => {
         return res.status(201).json({
-            msg: "you should receive an email"
+            msg: `Email sent from: ${email}, to: ${EMAIL}`
         })
     }).catch(error => {
         return res.status(500).json({ error })
