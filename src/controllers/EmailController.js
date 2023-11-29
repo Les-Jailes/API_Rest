@@ -1,6 +1,7 @@
 require('dotenv').config()
 const nodemailer = require('nodemailer');
-const Mailgen = require('mailgen');
+
+const emailTemplate = require('../lib/EmailTemplate');
 
 const EMAIL = process.env.EMAIL
 const PASSWORD = process.env.PASSWORD
@@ -15,30 +16,21 @@ const sendEmail =  (req, res) => {
         }
     }
     let transporter = nodemailer.createTransport(config);
-    let MailGenerator = new Mailgen({
-        theme: "cerberus",
-        product : {
-            logo: "https://i.postimg.cc/WpY5Qt18/logo-White.png",
-            logoHeight: "200px",
-            name: "LES JAILES - CONTACT US FORM",
-            link : 'https://test-boutique-clothing.vercel.app/'
-        }
-    })
-    let response = {
-        body: {
-            title : `Hi Les jailes, from ${name}`,
-            intro: `My telephone number is: ${telephone}.\nI have the following message:\n\n"${comments}"`,
-            outro: `Thanks, I will hear your response.\n Atte. ${name} - ${email}`
-        }
-    }
 
-    let mail = MailGenerator.generate(response)
 
+const dynamicContent = {
+    email: email,
+    name: name,
+    subject: `Contact Us Message - User ${email}`,
+    telephone: telephone,
+    comments: comments
+};
+const formattedEmail = emailTemplate.replace(/{{(\w+)}}/g, (match, p1) => dynamicContent[p1]);
     let message = {
         from : EMAIL,
         to : EMAIL,
         subject: `Contact Us Message - User ${email}`,
-        html: mail
+        html: formattedEmail
     }
 
     transporter.sendMail(message).then(() => {
