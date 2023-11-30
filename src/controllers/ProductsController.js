@@ -88,7 +88,39 @@ const updateProductQuantities = asyncHandler(async (purchasedProducts) => {
     }
 });
 
+const searchProducts = asyncHandler(async (req, res) => {
+    try {
+        const searchTerms = req.query.q.split(/\s+/);
+
+        const searchQuery = searchTerms.map(term => ({
+            $or: [
+                { name: { $regex: term, $options: 'i' } },
+                { category: { $regex: term, $options: 'i' } },
+                { type: { $regex: term, $options: 'i' } },
+                { code: { $regex: term, $options: 'i' } },
+                { "color": { $regex: term, $options: 'i' } }, 
+            ]
+        }));
+
+        const products = await Product.find({ $and: searchQuery });
+
+        if (products.length === 0) {
+            return res.status(200).json({ message: "No products were found matching your search query!" });
+        }
+
+        res.status(200).json(products);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
 
 module.exports = {
-    getProduct, getProducts, createProduct, updateProduct, deleteProduct, updateProductQuantities
-}
+    getProduct,
+    getProducts,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+    updateProductQuantities,
+    searchProducts,
+};
