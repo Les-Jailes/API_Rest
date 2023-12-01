@@ -90,7 +90,13 @@ const updateProductQuantities = asyncHandler(async (purchasedProducts) => {
 
 const searchProducts = asyncHandler(async (req, res) => {
     try {
-        const searchTerms = req.query.q.split(/\s+/);
+        const searchTerms = req.query.q.split(/\s+/).filter(term => 
+            /^[a-zA-Z0-9\s'-]+$/.test(term)
+        );
+
+        if (searchTerms.length === 0) {
+            return res.status(200).json({ message: "Your search query contains invalid characters!" });
+        }
 
         const searchQuery = searchTerms.map(term => ({
             $or: [
@@ -113,6 +119,7 @@ const searchProducts = asyncHandler(async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 
 module.exports = {
