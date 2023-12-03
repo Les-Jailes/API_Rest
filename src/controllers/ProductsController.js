@@ -98,15 +98,25 @@ const searchProducts = asyncHandler(async (req, res) => {
             return res.status(200).json({ message: "Your search query contains invalid characters!" });
         }
 
-        const searchQuery = searchTerms.map(term => ({
-            $or: [
-                { name: { $regex: term, $options: 'i' } },
-                { category: { $regex: term, $options: 'i' } },
-                { type: { $regex: term, $options: 'i' } },
-                { code: { $regex: term, $options: 'i' } },
-                { "color": { $regex: term, $options: 'i' } }, 
-            ]
-        }));
+        const searchQuery = searchTerms.map(term => {
+            if (term.toLowerCase() === 'men') {
+                return { $or: [
+                    { name: { $regex: '\\bmen\\b', $options: 'i' } },
+                    { category: { $regex: '\\bmen\\b', $options: 'i' } },
+                    { type: { $regex: '\\bmen\\b', $options: 'i' } },
+                    { code: { $regex: '\\bmen\\b', $options: 'i' } },
+                    { "color": { $regex: '\\bmen\\b', $options: 'i' } }
+                ]};
+            } else {
+                return { $or: [
+                    { name: { $regex: term, $options: 'i' } },
+                    { category: { $regex: term, $options: 'i' } },
+                    { type: { $regex: term, $options: 'i' } },
+                    { code: { $regex: term, $options: 'i' } },
+                    { "color": { $regex: term, $options: 'i' } }
+                ]};
+            }
+        });
 
         const products = await Product.find({ $and: searchQuery });
 
