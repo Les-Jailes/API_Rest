@@ -1,4 +1,4 @@
-require('dotenv').config()
+//require('dotenv').config()
 const express = require('express');
 const mongoose = require('mongoose');
 const app = express();
@@ -12,6 +12,8 @@ const countryRouter = require('./src/routes/CountryRoutes.js');
 const { HistoryRouter } = require('./src/routes/OrderHistoryRoutes.js');
 const emailRouter = require('./src/routes/EmailRoutes.js')
 
+import { config } from 'dotenv';
+config();
 const PORT = process.env.PORT;
 const MONGODB_URL = process.env.MONGODB_URL;
 const FRONTEND1 = process.env.FRONTEND1;
